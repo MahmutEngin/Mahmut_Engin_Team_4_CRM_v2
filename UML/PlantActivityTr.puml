@@ -1,0 +1,76 @@
+@startuml
+' Bu etkinlik diyagramı, uygulamanın ana akışını ve kullanıcı/yönetici rollerine göre ayrımı göstermektedir.
+
+skinparam activity {
+  BorderColor black
+  BackgroundColor LightGray
+  FontColor black
+  FontSize 12
+  ArrowColor DimGray
+  ArrowFontColor DimGray
+}
+skinparam activity EndColor DarkRed
+skinparam activity StartColor DarkGreen
+skinparam ArrowThickness 1
+skinparam Shadowing false
+skinparam DefaultFontName "Inter"
+
+start
+
+:Uygulama Başlatıldı;
+:LoginPage Yükle;
+
+:Kullanıcı Girişi (Username/Password);
+
+if (Giriş Doğru mu?) then (Evet)
+  if (Kullanıcı Rolü?) then (Kullanıcı)
+    :UserPreferencesPage Yükle;
+    floating note right
+      **Kullanıcı Sayfaları:**
+      - Başvurular
+      - Mülakatlar
+      - Mentor Görüşmeleri
+    end note
+    fork
+      :Başvurular Sayfasına Erişim;
+      :Mülakatlar Sayfasına Erişim;
+      :Mentor Sayfasına Erişim;
+    end fork
+    :Kullanıcı İşlemleri Gerçekleştir;
+    :Ana Menüye Dön / Çıkış Yap;
+    if (Çıkış mı?) then (Evet)
+      :Uygulama Kapat;
+      stop
+    else (Hayır)
+      -> LoginPage;
+    endif
+  else (Yönetici)
+    :AdminPreferencesPage Yükle;
+    floating note right
+      **Yönetici Sayfaları:**
+      - Başvurular
+      - Mülakatlar
+      - Mentor Görüşmeleri
+      - Yönetici Menüsü (Olaylar/Mail)
+    end note
+    fork
+      :Başvurular Sayfasına Erişim;
+      :Mülakatlar Sayfasına Erişim;
+      :Mentor Sayfasına Erişim;
+      :AdminPage'e Erişim;
+    end fork
+    :Yönetici İşlemleri Gerçekleştir;
+    :Ana Menüye Dön / Çıkış Yap;
+    if (Çıkış mı?) then (Evet)
+      :Uygulama Kapat;
+      stop
+    else (Hayır)
+      -> LoginPage;
+    endif
+  endif
+else (Hayır)
+  :Hatalı Giriş Uyarısı;
+  -> LoginPage;
+endif
+
+@enduml

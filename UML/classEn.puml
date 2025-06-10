@@ -1,0 +1,233 @@
+@startuml
+' This diagram shows the main classes and their relationships in your project.
+' + (public), - (private) access specifiers are directly shown.
+
+' General Style Settings
+skinparam ClassBackgroundColor white
+skinparam ClassBorderColor #555555
+skinparam Shadowing false
+skinparam ArrowColor #333333
+skinparam Linetype ortho
+skinparam DefaultFontName "Inter"
+
+' User Interface (PyQt6) Classes Package
+package "User Interface (PyQt6)" {
+    skinparam package {
+        BackgroundColor LightBlue
+        BorderColor DarkBlue
+        FontColor DarkBlue
+    }
+
+    class LoginPage {
+        - applicationsForm: ApplicationsPage
+        - interviewsForm: InterviewsPage
+        - mentorForm: MentorPage
+        - adminForm: AdminPage
+        - adminPreferences: AdminPreferencesPage
+        - userPreferences: UserPreferencesPage
+        - loginButton: QtWidgets.QPushButton
+        - usernameLineEdit: QtWidgets.QLineEdit
+        - passwordLineEdit: QtWidgets.QLineEdit
+        + __init__()
+        + setOtherPages()
+        + login()
+        + navigateTo(targetPage)
+        + closeApplication()
+        --
+        Note: Redirects to the appropriate preference page\n(User or Admin) based on the logged-in user's role.
+    }
+
+    ' User Role Specific Pages
+    package "User Pages" {
+        skinparam package {
+            BackgroundColor Azure
+            BorderColor DeepSkyBlue
+            FontColor MidnightBlue
+        }
+        class UserPreferencesPage {
+            - applicationsForm: ApplicationsPage
+            - interviewsForm: InterviewsPage
+            - mentorForm: MentorPage
+            - userPreferences: UserPreferencesPage 'self-reference
+            + __init__()
+            + setOtherPages()
+            + applicationsFunc()
+            + mentorMeetingFunc()
+            + interviewsFunc()
+            + mainMenuFunc()
+            + closeFunc()
+        }
+
+        class ApplicationsPage {
+            - page: QMainWindow
+            - user: str
+            - excelPath: str
+            - applicationsWorkbook: openpyxl.Workbook
+            - displayTableWidget: QtWidgets.QTableWidget
+            + __init__()
+            + setOtherPage(page)
+            + returnToPreferencesPage()
+            + getAllApplications()
+            + getDefinedMentorMeetings()
+            + filterApplications()
+            + performSearch()
+            + logout()
+        }
+
+        class InterviewsPage {
+            - excelPath: str
+            - page: QMainWindow
+            - tableWidget: QtWidgets.QTableWidget
+            + __init__()
+            + loadExcel()
+            + displayData(headers, data)
+            + search()
+            + getSubmittedProjects()
+            + interviews()
+            + onMultipleTabsChanged(index)
+            + returnToPreferencesPage()
+            + logout()
+        }
+
+        class MentorPage {
+            - excelPath: str
+            - page: QMainWindow
+            - tableWidget: QtWidgets.QTableWidget
+            + __init__()
+            + loadExcel()
+            + displayData(headers, data)
+            + search()
+            + interviews()
+            + onMultipleTabsChanged(index)
+            + goBack()
+            + exitApp()
+        }
+    }
+
+    ' Admin Role Specific Pages
+    package "Admin Pages" {
+        skinparam package {
+            BackgroundColor Coral
+            BorderColor DarkRed
+            FontColor DarkRed
+        }
+        class AdminPreferencesPage {
+            - applicationsForm: ApplicationsPage
+            - mentorForm: MentorPage
+            - interviewsForm: InterviewsPage
+            - adminForm: AdminPage
+            - adminPreferences: AdminPreferencesPage 'self-reference
+            + __init__()
+            + setOtherPages()
+            + applicationsFunc()
+            + mentorMeetingFunc()
+            + interviewsFunc()
+            + adminMenuFunc()
+            + mainMenuFunc()
+            + closeFunc()
+        }
+
+        class AdminPage {
+            - page: QMainWindow
+            - events: list
+            - showTableWidget: QtWidgets.QTableWidget
+            + __init__()
+            + checkEvents()
+            + sendToEmails()
+            + setOtherPage(page)
+            + closeApplication()
+            + returnToPage()
+        }
+    }
+}
+
+' Helper Modules (Google API & Excel) Package
+package "Helper Modules (API & Excel)" {
+    skinparam package {
+        BackgroundColor LightGreen
+        BorderColor DarkGreen
+        FontColor DarkGreen
+    }
+
+    class Auth {
+        - SCOPES: list
+        + auth(): Credentials
+    }
+
+    class FindExcel {
+        + getLatestVitFolder(basePath: str): str
+        + getExcelFilesFromLatestVit(basePath: str): dict
+    }
+
+    class GetEvents {
+        - SCOPES: list
+        + main(): list
+    }
+
+    class ListFiles {
+        + listFiles()
+    }
+
+    class DownloadFile {
+        + downloadFile(fileId: str)
+    }
+}
+
+' Application Main Startup
+package "Application Management" {
+    skinparam package {
+        BackgroundColor LightGoldenRodYellow
+        BorderColor Orange
+        FontColor OrangeRed
+    }
+    class ApplicationMain {
+        + run()
+        + setupUIPages()
+        + showInitialPage()
+    }
+}
+
+
+' ** Relationships **
+
+' Main Page Redirections (Dependency) - Role separation after login
+LoginPage "1" --> "1" UserPreferencesPage : **User Role Redirection**
+LoginPage "1" --> "1" AdminPreferencesPage : **Admin\nRedirection**
+
+' Transitions from Preference Pages to Main Content Pages (Dependency/Usage)
+UserPreferencesPage "1" --> "1" ApplicationsPage : provides access to
+UserPreferencesPage "1" --> "1" InterviewsPage : provides access to
+UserPreferencesPage "1" --> "1" MentorPage : provides access to
+' Return to LoginPage or close application from UserPreferencesPage
+UserPreferencesPage --> LoginPage : returns to main menu
+UserPreferencesPage --> ApplicationMain : closes application
+
+AdminPreferencesPage "1" --> "1" ApplicationsPage : provides access to
+AdminPreferencesPage "1" --> "1" InterviewsPage : provides access to
+AdminPreferencesPage "1" --> "1" MentorPage : provides access to
+AdminPreferencesPage "1" --> "1" AdminPage : provides access to (Admin Menu)
+' Return to LoginPage or close application from AdminPreferencesPage
+AdminPreferencesPage --> LoginPage : returns to main menu
+AdminPreferencesPage --> ApplicationMain : closes application
+
+' Dependencies from GUI Classes to Helper Modules
+ApplicationsPage ..> FindExcel : uses
+InterviewsPage ..> FindExcel : uses
+MentorPage ..> FindExcel : uses
+AdminPage ..> GetEvents : uses
+
+' Relationships Among Google API Helper Modules (Dependency)
+GetEvents ..> Auth : uses
+ListFiles ..> Auth : uses
+DownloadFile ..> Auth : uses
+
+' Main Application Flow Relationships for Page Creation and Management
+ApplicationMain "1" --> "1" LoginPage : creates and manages
+ApplicationMain "1" --> "1" ApplicationsPage : creates and manages
+ApplicationMain "1" --> "1" InterviewsPage : creates and manages
+ApplicationMain "1" --> "1" MentorPage : creates and manages
+ApplicationMain "1" --> "1" AdminPage : creates and manages
+ApplicationMain "1" --> "1" UserPreferencesPage : creates and manages
+ApplicationMain "1" --> "1" AdminPreferencesPage : creates and manages
+
+@enduml

@@ -1,0 +1,26 @@
+@startuml
+class LoginPage {
+    - basvuruform: BasvurularPage
+    - mulakatlarform: MulakatlarPage
+    - mentorform: MentorPage
+    - adminform: AdminPage
+    - tercihlerAdmin: TercihlerAdminPage
+    - tercihlerKullanici: TercihlerKullaniciPage
+    - basvuruform_lg: BasvurularPage
+    - mulakatlarform_lg: MulakatlarPage
+    - mentorform_lg: MentorPage
+    - adminform_lg: AdminPage
+    - tercihlerAdmin_lg: TercihlerAdminPage
+    - tercihlerKullanici_lg: TercihlerKullaniciPage
+    - pushButton_login: QtWidgets.QPushButton
+    - pushButton_exit: QtWidgets.QPushButton
+    - lineEdit_username: QtWidgets.QLineEdit
+    - lineEdit_password: QtWidgets.QLineEdit
+    - label_bilgilendirme: QtWidgets.QLabel
+    + __init__()
+    + diger_sayfalar(BasvurularPage, MulakatlarPage, MentorPage, AdminPage, TercihlerKullaniciPage, TercihlerAdminPage)
+    + girisyap()
+    + gecis_yap(hedef_sayfa)
+    + uygulama_kapatma()
+}
+@enduml

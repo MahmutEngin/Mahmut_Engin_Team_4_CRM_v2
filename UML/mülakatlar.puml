@@ -1,0 +1,28 @@
+@startuml
+class MulakatlarPage {
+    - excel_path: str
+    - initializing: bool
+    - sayfa: QMainWindow
+    - pushButton_ara: QtWidgets.QPushButton
+    - pushButton_projeGonderilenler: QtWidgets.QPushButton
+    - pushButton_projeGelmeyenler: QtWidgets.QPushButton
+    - pushButton_tumMulakatlar: QtWidgets.QPushButton
+    - pushButton_tercihler: QtWidgets.QPushButton
+    - pushButton_exit: QtWidgets.QPushButton
+    - lineEdit_ara: QtWidgets.QLineEdit
+    - comboBox_cokluSekme: QtWidgets.QComboBox
+    - tableWidget: QtWidgets.QTableWidget
+    + __init__()
+    + load_excel()
+    + display_data(headers, data)
+    + search()
+    + projesi_gonderilmis_olanlar()
+    + projesi_gelmis_olanlar()
+    + interviews()
+    + multiple_tabs_changed(index)
+    + fill_combobox_categories()
+    + diger_sayfa(page)
+    + tercihlerSayfasinaDon()
+    + cikis_yap()
+}
+@enduml

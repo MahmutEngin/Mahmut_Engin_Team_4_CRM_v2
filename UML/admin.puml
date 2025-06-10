@@ -1,0 +1,17 @@
+@startuml
+class AdminPage {
+    - sayfa: QMainWindow
+    - olaylar: list
+    - pushButton_etkinlikkontrolu: QtWidgets.QPushButton
+    - pushButton_mailgonder: QtWidgets.QPushButton
+    - pushButton_tercihler: QtWidgets.QPushButton
+    - pushButton_exit: QtWidgets.QPushButton
+    - tableWidget_show: QtWidgets.QTableWidget
+    + __init__()
+    + etkinliklerin_kontrolu()
+    + mailadreslerine_gonder()
+    + diger_sayfa(page)
+    + uygulama_kapatma()
+    + sayfayaGeriDon()
+}
+@enduml

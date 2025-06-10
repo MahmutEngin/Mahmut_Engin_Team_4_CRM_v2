@@ -1,0 +1,5 @@
+@startuml
+class ListFiles {
+    + list_files()
+}
+@enduml

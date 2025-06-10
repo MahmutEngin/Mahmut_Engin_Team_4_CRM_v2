@@ -1,0 +1,5 @@
+@startuml
+class DownloadFile {
+    + download_file(real_file_id: str)
+}
+@enduml

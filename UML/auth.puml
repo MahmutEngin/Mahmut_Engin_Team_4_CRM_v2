@@ -1,0 +1,6 @@
+@startuml
+class Auth {
+    - SCOPES: list
+    + auth(): Credentials
+}
+@enduml

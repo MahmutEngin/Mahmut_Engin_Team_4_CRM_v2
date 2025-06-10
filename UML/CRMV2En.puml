@@ -1,0 +1,370 @@
+@startuml
+!theme plain
+skinparam classAttributeIconSize 0
+skinparam defaultFontName Arial
+skinparam defaultFontSize 12
+skinparam shadowing true
+
+' General Style Settings
+skinparam class {
+    BorderColor #2E4053
+    BackgroundColor #D6EAF8
+    ArrowColor #1B4F72
+    FontColor #1B2631
+    FontStyle bold
+    FontSize 13
+}
+
+skinparam package {
+    BorderColor #2874A6
+    FontColor #1B2631
+    HeaderBackgroundColor #85C1E9
+    FontSize 14
+    FontStyle bold
+}
+
+skinparam arrow {
+    Color #117A65
+    Thickness 2
+    FontColor #117A65
+    FontSize 11
+}
+
+' ----- PyQt6 UI Elements -----
+package "PyQt6 UI Elements" #D0E9F7 {
+    class QMainWindow <<PyQt6 Class>> #AED6F1 {
+        + show(): void
+        + hide(): void
+        + close(): void
+        + findChild(type: QWidget, name: string): QWidget
+    }
+
+    class QWidget <<PyQt6 Class>> #EBF5FB {
+    }
+
+    class QPushButton <<PyQt6 Class>> #85C1E9 {
+        + clicked: Signal
+    }
+
+    class QLineEdit <<PyQt6 Class>> #85C1E9 {
+        + text(): string
+    }
+
+    class QLabel <<PyQt6 Class>> #85C1E9 {
+        + setText(text: string): void
+    }
+
+    class QComboBox <<PyQt6 Class>> #85C1E9 {
+        + currentIndexChanged: Signal
+        + currentText(): string
+        + addItem(text: string): void
+        + clear(): void
+    }
+
+    class QTableWidget <<PyQt6 Class>> #85C1E9 {
+        + setColumnCount(count: int): void
+        + setRowCount(count: int): void
+        + setHorizontalHeaderLabels(labels: list): void
+        + setItem(row: int, col: int, item: QTableWidgetItem): void
+        + clear(): void
+        + resizeColumnsToContents(): void
+    }
+
+    class QTableWidgetItem <<PyQt6 Class>> #85C1E9 {
+        + QTableWidgetItem(text: string)
+    }
+
+    class QMessageBox <<PyQt6 Class>> #F8C471 {
+        + critical(parent: QWidget, title: string, text: string): void
+        + warning(parent: QWidget, title: string, text: string): void
+        + information(parent: QWidget, title: string, text: string): void
+    }
+
+    class QApplication <<PyQt6 Class>> #7DCEA0 {
+        + quit(): void
+    }
+
+    class QTimer <<PyQt6 Class>> #A9CCE3 {
+        + singleShot(msec: int, callback: Callable): void
+    }
+}
+
+' ----- Python Standard Libraries -----
+package "Python Standard Lib" #FEF9E7 {
+    class openpyxl <<Python Module>> #F9E79F {
+        + load_workbook(path: string): Workbook
+    }
+    class openpyxl.workbook.workbook.Workbook <<Python Class>> #F7DC6F {
+        + active: Worksheet
+    }
+    class openpyxl.worksheet.worksheet.Worksheet <<Python Class>> #FCF3CF {
+        + iter_rows(values_only: bool = false, min_row: int = 0, max_row: int = 0): iterator
+    }
+    class openpyxl.cell.cell.Cell <<Python Class>> #FCF3CF {
+        + value: any
+    }
+
+    class os <<Python Module>> #FADBD8 {
+        + path: os.path
+        + listdir(path: string): list
+    }
+    class os.path <<Python Class>> #F5B7B1 {
+        + join(paths: string[]): string
+        + dirname(path: string): string
+        + exists(path: string): bool
+        + splitext(path: string): tuple
+    }
+
+    class re <<Python Module>> #D6EAF8 {
+        + match(pattern: string, string: string): Match
+    }
+    class re.Match <<Python Class>> #D4E6F1 {
+        + group(index: int): string
+    }
+
+    class datetime <<Python Module>> #D7BDE2 {
+        + datetime
+        + timezone
+    }
+    class datetime.datetime <<Python Class>> #C39BD3 {
+        + now(tz: timezone): datetime
+        + isoformat(): string
+    }
+    class datetime.timezone <<Python Class>> #BB8FCE {
+        + utc: timezone
+    }
+
+    class FileNotFoundError <<Built-in Exception>> #F1948A {
+    }
+}
+
+' ----- Google API Modules -----
+package "Google API Modules" #D5F5E3 {
+    class auth <<Python Module>> #A3E4D7 {
+        + auth(): Credentials
+    }
+    class google.auth.transport.requests.Request <<Python Class>> #76D7C4 {
+    }
+    class google.oauth2.credentials.Credentials <<Python Class>> #48C9B0 {
+        + from_authorized_user_file(file: string, scopes: list): Credentials
+        + valid: bool
+        + expired: bool
+        + refresh_token: string
+        + refresh(request: Request): void
+        + to_json(): string
+    }
+    class google_auth_oauthlib.flow.InstalledAppFlow <<Python Class>> #1ABC9C {
+        + from_client_secrets_file(file: string, scopes: list): InstalledAppFlow
+        + run_local_server(port: int): Credentials
+    }
+    class googleapiclient.discovery <<Python Module>> #16A085 {
+        + build(serviceName: string, version: string, credentials: Credentials): service
+    }
+    class googleapiclient.errors.HttpError <<Python Class>> #73C6B6 {
+    }
+}
+
+' ----- Custom Modules -----
+package "Custom Modules" #E8DAEF {
+    class find_excel <<Python Module>> #D2B4DE {
+        + get_latest_vit_folder(base_path: string = "data"): string
+        + get_excel_files_from_latest_vit(base_path: string = "data"): dict
+    }
+
+    class BasvuruForm <<Custom Class>> #A569BD {
+        + switch_page(page: QWidget): void
+    }
+    class MulakatlarForm <<Custom Class>> #9B59B6 {
+        + switch_page(page: QWidget): void
+    }
+    class MentorForm <<Custom Class>> #8E44AD {
+        + switch_page(page: QWidget): void
+    }
+    class AdminForm <<Custom Class>> #7D3C98 {
+        + switch_page(page: QWidget): void
+    }
+}
+
+' ----- Main Application Pages -----
+class LoginPage #F4D03F {
+    - application_form_lg: QWidget
+    - interviews_form_lg: QWidget
+    - mentor_form_lg: QWidget
+    - admin_form_lg: QWidget
+    - preferences_admin_lg: QWidget
+    - preferences_user_lg: QWidget
+    - pushButton_login: QPushButton
+    - pushButton_exit: QPushButton
+    - lineEdit_username: QLineEdit
+    - lineEdit_password: QLineEdit
+    - label_info: QLabel
+    + __init__()
+    + switch_pages(application_form, interviews_form, mentor_form, admin_form, user_preferences, admin_preferences): void
+    + login(): void
+    - navigate_to(target_page: QWidget): void
+    + close_application(): void
+}
+
+class MentorPage #E67E22 {
+    - excel_path: string
+    - initializing: boolean
+    - page: QWidget
+    - pushButton_search: QPushButton
+    - pushButton_allInterviews: QPushButton
+    - pushButton_preferences: QPushButton
+    - pushButton_exit: QPushButton
+    - lineEdit_search: QLineEdit
+    - comboBox_multiTab: QComboBox
+    - tableWidget: QTableWidget
+    + __init__()
+    + load_excel(): tuple
+    + display_data(headers: list, data: list): void
+    + search(): void
+    + interviews(): void
+    + multiple_tabs_changed(index: int): void
+    + fill_combobox_categories(): void
+    + go_back(): void
+    + exit_app(): void
+    + switch_page(page: QWidget): void
+}
+
+class MulakatlarPage #D2527F {
+    - excel_path: string
+    - interviews_sheet: Worksheet
+    - page: QWidget
+    - pushButton_search: QPushButton
+    - pushButton_sentProject: QPushButton
+    - pushButton_receivedProject: QPushButton
+    - pushButton_preferences: QPushButton
+    - pushButton_exit: QPushButton
+    - lineEdit_search: QLineEdit
+    - tableWidget: QTableWidget
+    + __init__()
+    + load_excel(): tuple
+    + display_data(headers: list, data: list): void
+    + search(): void
+    + sent_projects(): void
+    + received_projects(): void
+    + switch_page(page: QWidget): void
+    + return_to_preferences(): void
+    + exit_app(): void
+}
+
+class PreferencesAdminPage #5B2C6F {
+    - application_form_pa: QWidget
+    - interviews_form_pa: QWidget
+    - mentor_form_pa: QWidget
+    - admin_form_pa: QWidget
+    - preferences_admin_pa: QWidget
+    - pushButton_adminMenu: QPushButton
+    - pushButton_applications: QPushButton
+    - pushButton_mainMenu: QPushButton
+    - pushButton_exit: QPushButton
+    - pushButton_mentorInterview: QPushButton
+    - pushButton_interviews: QPushButton
+    + __init__()
+    + switch_pages(application_form, mentor_form, interviews_form, admin_form, preferences_admin): void
+    + applications_function(): void
+    + mentorInterview_function(): void
+    + interviews_function(): void
+    + adminMenu_function(): void
+    + mainMenu_function(): void
+    + close_function(): void
+}
+
+class PreferencesUserPage #2471A3 {
+    - application_form_pu: QWidget
+    - interviews_form_pu: QWidget
+    - mentor_form_pu: QWidget
+    - preferences_user_pu: QWidget
+    - pushButton_applications: QPushButton
+    - pushButton_mainMenu: QPushButton
+    - pushButton_exit: QPushButton
+    - pushButton_mentorInterview: QPushButton
+    - pushButton_interviews: QPushButton
+    + __init__()
+    + switch_pages(application_form, interviews_form, mentor_form, preferences_user): void
+    + applications_function(): void
+    + mentorInterview_function(): void
+    + interviews_function(): void
+    + mainMenu_function(): void
+    + close_function(): void
+}
+
+class ProgramEntrypoint <<Main Application>> #6E5849 {
+    + main_app_execution()
+}
+
+' ----- Relationships -----
+
+' Inheritance
+QMainWindow <|-- LoginPage
+QMainWindow <|-- MentorPage
+QMainWindow <|-- MulakatlarPage
+QMainWindow <|-- PreferencesAdminPage
+QMainWindow <|-- PreferencesUserPage
+
+' Dependencies (Uses)
+LoginPage .up.> QTimer
+LoginPage .up.> openpyxl
+LoginPage .up.> os
+
+MentorPage .up.> openpyxl
+MentorPage .up.> os
+MentorPage .up.> find_excel
+MentorPage .up.> QMessageBox
+MentorPage .up.> QApplication
+MentorPage .up.> QTableWidgetItem
+
+MulakatlarPage .up.> openpyxl
+MulakatlarPage .up.> os
+MulakatlarPage .up.> find_excel
+MulakatlarPage .up.> QMessageBox
+MulakatlarPage .up.> QTableWidgetItem
+
+PreferencesAdminPage .up.> os
+PreferencesUserPage .up.> os
+
+openpyxl.workbook.workbook.Workbook "1" *-- "1" openpyxl.worksheet.worksheet.Worksheet
+openpyxl.worksheet.worksheet.Worksheet "1" *-- "*" openpyxl.cell.cell.Cell : contains (implied)
+
+os "1" *-- "1" os.path
+re "1" *-- "1" re.Match
+
+datetime "1" *-- "1" datetime.datetime
+datetime "1" *-- "1" datetime.timezone
+
+' Composition (UI Elements)
+LoginPage "1" *-- "1" QPushButton
+LoginPage "1" *-- "1" QLineEdit
+LoginPage "1" *-- "1" QLabel
+
+MentorPage "1" *-- "1" QPushButton
+MentorPage "1" *-- "1" QLineEdit
+MentorPage "1" *-- "1" QComboBox
+MentorPage "1" *-- "1" QTableWidget
+
+MulakatlarPage "1" *-- "1" QPushButton
+MulakatlarPage "1" *-- "1" QLineEdit
+MulakatlarPage "1" *-- "1" QTableWidget
+
+PreferencesAdminPage "1" *-- "1" QPushButton
+PreferencesUserPage "1" *-- "1" QPushButton
+
+' Navigation Flow (Collaboration)
+LoginPage --> PreferencesUserPage : <<User Login>> #2196F3
+LoginPage -[#2196F3,thickness=2]-> PreferencesUserPage : <<User Login>>
+
+PreferencesAdminPage -right-> BasvuruForm : #7D3C98-->
+PreferencesAdminPage -right-> MulakatlarPage : #D2527F-->
+PreferencesAdminPage -right-> MentorForm : #E67E22-->
+PreferencesAdminPage -right-> AdminForm : #6E5849-->
+
+PreferencesUserPage -right-> BasvuruForm : #7D3C98-->
+PreferencesUserPage -right-> MulakatlarPage : #D2527F-->
+PreferencesUserPage -right-> MentorForm : #E67E22-->
+
+' Return Flow
+BasvuruForm .left.> PreferencesAdminPage : #117A65-.-> 
+BasvuruForm .left.> PreferencesUserPage : #2471A3-.-> 
+MulakatlarPage .left

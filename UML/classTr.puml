@@ -1,0 +1,466 @@
+@startuml
+' Bu diyagram, projenizin ana sınıflarını ve ilişkilerini göstermektedir.
+' + (public), - (private) erişim belirteçleri doğrudan gösterilmektedir.
+
+' Genel Stil Ayarları
+skinparam ClassBackgroundColor white
+skinparam ClassBorderColor #555555
+skinparam Shadowing false
+skinparam ArrowColor #333333
+skinparam Linetype ortho
+skinparam DefaultFontName "Inter"
+
+' Kullanıcı Arayüzü (PyQt6) Sınıfları Paketi
+package "Kullanıcı Arayüzü (PyQt6)" {
+    skinparam package {
+        BackgroundColor LightBlue
+        BorderColor DarkBlue
+        FontColor DarkBlue
+    }
+
+    class LoginPage {
+        - basvuruform: BasvurularPage
+        - mulakatlarform: MulakatlarPage
+        - mentorform: MentorPage
+        - adminform: AdminPage
+        - tercihlerAdmin: TercihlerAdminPage
+        - tercihlerKullanici: TercihlerKullaniciPage
+        - pushButton_login: QtWidgets.QPushButton
+        - lineEdit_username: QtWidgets.QLineEdit
+        - lineEdit_password: QtWidgets.QLineEdit
+        + __init__()
+        + diger_sayfalar()
+        + girisyap()
+        + gecis_yap()
+        + uygulama_kapatma()
+        --
+        Not: Giriş yapan kullanıcının rolüne göre\n(Kullanıcı veya Yönetici) ilgili tercih sayfasına yönlendirir.
+    }
+
+    ' Kullanıcı Rolüne Özel Sayfalar
+    package "Kullanıcı Sayfaları" {
+        skinparam package {
+            BackgroundColor Azure
+            BorderColor DeepSkyBlue
+            FontColor MidnightBlue
+        }
+        class TercihlerKullaniciPage {
+            - basvuruform: BasvurularPage
+            - mulakatlarform: MulakatlarPage
+            - mentorform: MentorPage
+            - tercihlerKullanici: TercihlerKullaniciPage 'kendisine referans
+            + __init__()
+            + diger_sayfalar()
+            + basvuru_fonk()
+            + mentorGorusmesi_fonk()
+            + mulakatlar_fonk()
+            + anamenu_fonk()
+            + kapatma_fonk()
+        }
+
+        class BasvurularPage {
+            - sayfa: QMainWindow
+            - kullanici: str
+            - excel_path: str
+            - dosya_basvurular: openpyxl.Workbook
+            - tableWidget_goster: QtWidgets.QTableWidget
+            + __init__()
+            + diger_sayfa()
+            + tercihler_sayfasina_don()
+            + tumbasvulari_getir()
+            + mentor_gosrusmesi_tanimlananlar()
+            + basvurulari_filtrele()
+            + arama_yapilamasi()
+            + cikis_yap()
+        }
+
+        class MulakatlarPage {
+            - excel_path: str
+            - sayfa: QMainWindow
+            - tableWidget: QtWidgets.QTableWidget
+            + __init__()
+            + load_excel()
+            + display_data()
+            + search()
+            + projesi_gonderilmis_olanlar()
+            + interviews()
+            + multiple_tabs_changed()
+            + tercihlerSayfasinaDon()
+            + cikis_yap()
+        }
+
+        class MentorPage {
+            - excel_path: str
+            - sayfa: QMainWindow
+            - tableWidget: QtWidgets.QTableWidget
+            + __init__()
+            + load_excel()
+            + display_data()
+            + search()
+            + interviews()
+            + multiple_tabs_changed()
+            + go_back()
+            + exitp()
+        }
+    }
+
+    ' Yönetici Rolüne Özel Sayfalar
+    package "Yönetici Sayfaları" {
+        skinparam package {
+            BackgroundColor Coral
+            BorderColor DarkRed
+            FontColor DarkRed
+        }
+        class TercihlerAdminPage {
+            - basvuruform: BasvurularPage
+            - mentorform: MentorPage
+            - mulakatlarform: MulakatlarPage
+            - adminform: AdminPage
+            - tercihlerAdmin: TercihlerAdminPage 'kendisine referans
+            + __init__()
+            + diger_sayfalar()
+            + basvurular_fonk()
+            + mentorGorusmesi_fonk()
+            + mulakatlar_fonk()
+            + adminMenu_fonk()
+            + anamenu_fonk()
+            + kapatma_fonk()
+        }
+
+        class AdminPage {
+            - sayfa: QMainWindow
+            - olaylar: list
+            - tableWidget_show: QtWidgets.QTableWidget
+            + __init__()
+            + etkinliklerin_kontrolu()
+            + mailadreslerine_gonder()
+            + diger_sayfa()
+            + uygulama_kapatma()
+            + sayfayaGeriDon()
+        }
+    }
+}
+
+' Yardımcı (Google API & Excel) Sınıfları/Modülleri Paketi
+package "Yardımcı Modüller (API & Excel)" {
+    skinparam package {
+        BackgroundColor LightGreen
+        BorderColor DarkGreen
+        FontColor DarkGreen
+    }
+
+    class Auth {
+        - SCOPES: list
+        + auth(): Credentials
+    }
+
+    class FindExcel {
+        + get_latest_vit_folder(base_path: str): str
+        + get_excel_files_from_latest_vit(base_path: str): dict
+    }
+
+    class GetEvents {
+        - SCOPES: list
+        + main(): list
+    }
+
+    class ListFiles {
+        + list_files()
+    }
+
+    class DownloadFile {
+        + download_file(real_file_id: str)
+    }
+}
+
+' Uygulama Ana Başlangıcı
+package "Uygulama Yönetimi" {
+    skinparam package {
+        BackgroundColor LightGoldenRodYellow
+        BorderColor Orange
+        FontColor OrangeRed
+    }
+    class ApplicationMain {
+        + run()
+        + setup_ui_pages()
+        + show_initial_page()
+    }
+}
+
+
+' ** @startuml
+' Bu diyagram, projenizin ana sınıflarını ve ilişkilerini göstermektedir.
+' + (public), - (private) erişim belirteçleri doğrudan gösterilmektedir.
+
+' Genel Stil Ayarları
+skinparam ClassBackgroundColor white
+skinparam ClassBorderColor #555555
+skinparam Shadowing false
+skinparam ArrowColor #333333
+skinparam Linetype ortho
+skinparam DefaultFontName "Inter"
+
+' Kullanıcı Arayüzü (PyQt6) Sınıfları Paketi
+package "Kullanıcı Arayüzü (PyQt6)" {
+    skinparam package {
+        BackgroundColor LightBlue
+        BorderColor DarkBlue
+        FontColor DarkBlue
+    }
+
+    class LoginPage {
+        - basvuruform: BasvurularPage
+        - mulakatlarform: MulakatlarPage
+        - mentorform: MentorPage
+        - adminform: AdminPage
+        - tercihlerAdmin: TercihlerAdminPage
+        - tercihlerKullanici: TercihlerKullaniciPage
+        - pushButton_login: QtWidgets.QPushButton
+        - lineEdit_username: QtWidgets.QLineEdit
+        - lineEdit_password: QtWidgets.QLineEdit
+        + __init__()
+        + diger_sayfalar()
+        + girisyap()
+        + gecis_yap()
+        + uygulama_kapatma()
+        --
+        Not: Giriş yapan kullanıcının rolüne göre\n(Kullanıcı veya Yönetici) ilgili tercih sayfasına yönlendirir.
+    }
+
+    ' Kullanıcı Rolüne Özel Sayfalar
+    package "Kullanıcı Sayfaları" {
+        skinparam package {
+            BackgroundColor Azure
+            BorderColor DeepSkyBlue
+            FontColor MidnightBlue
+        }
+        class TercihlerKullaniciPage {
+            - basvuruform: BasvurularPage
+            - mulakatlarform: MulakatlarPage
+            - mentorform: MentorPage
+            - tercihlerKullanici: TercihlerKullaniciPage 'kendisine referans
+            + __init__()
+            + diger_sayfalar()
+            + basvuru_fonk()
+            + mentorGorusmesi_fonk()
+            + mulakatlar_fonk()
+            + anamenu_fonk()
+            + kapatma_fonk()
+        }
+
+        class BasvurularPage {
+            - sayfa: QMainWindow
+            - kullanici: str
+            - excel_path: str
+            - dosya_basvurular: openpyxl.Workbook
+            - tableWidget_goster: QtWidgets.QTableWidget
+            + __init__()
+            + diger_sayfa()
+            + tercihler_sayfasina_don()
+            + tumbasvulari_getir()
+            + mentor_gosrusmesi_tanimlananlar()
+            + basvurulari_filtrele()
+            + arama_yapilamasi()
+            + cikis_yap()
+        }
+
+        class MulakatlarPage {
+            - excel_path: str
+            - sayfa: QMainWindow
+            - tableWidget: QtWidgets.QTableWidget
+            + __init__()
+            + load_excel()
+            + display_data()
+            + search()
+            + projesi_gonderilmis_olanlar()
+            + interviews()
+            + multiple_tabs_changed()
+            + tercihlerSayfasinaDon()
+            + cikis_yap()
+        }
+
+        class MentorPage {
+            - excel_path: str
+            - sayfa: QMainWindow
+            - tableWidget: QtWidgets.QTableWidget
+            + __init__()
+            + load_excel()
+            + display_data()
+            + search()
+            + interviews()
+            + multiple_tabs_changed()
+            + go_back()
+            + exitp()
+        }
+    }
+
+    ' Yönetici Rolüne Özel Sayfalar
+    package "Yönetici Sayfaları" {
+        skinparam package {
+            BackgroundColor Coral
+            BorderColor DarkRed
+            FontColor DarkRed
+        }
+        class TercihlerAdminPage {
+            - basvuruform: BasvurularPage
+            - mentorform: MentorPage
+            - mulakatlarform: MulakatlarPage
+            - adminform: AdminPage
+            - tercihlerAdmin: TercihlerAdminPage 'kendisine referans
+            + __init__()
+            + diger_sayfalar()
+            + basvurular_fonk()
+            + mentorGorusmesi_fonk()
+            + mulakatlar_fonk()
+            + adminMenu_fonk()
+            + anamenu_fonk()
+            + kapatma_fonk()
+        }
+
+        class AdminPage {
+            - sayfa: QMainWindow
+            - olaylar: list
+            - tableWidget_show: QtWidgets.QTableWidget
+            + __init__()
+            + etkinliklerin_kontrolu()
+            + mailadreslerine_gonder()
+            + diger_sayfa()
+            + uygulama_kapatma()
+            + sayfayaGeriDon()
+        }
+    }
+}
+
+' Yardımcı (Google API & Excel) Sınıfları/Modülleri Paketi
+package "Yardımcı Modüller (API & Excel)" {
+    skinparam package {
+        BackgroundColor LightGreen
+        BorderColor DarkGreen
+        FontColor DarkGreen
+    }
+
+    class Auth {
+        - SCOPES: list
+        + auth(): Credentials
+    }
+
+    class FindExcel {
+        + get_latest_vit_folder(base_path: str): str
+        + get_excel_files_from_latest_vit(base_path: str): dict
+    }
+
+    class GetEvents {
+        - SCOPES: list
+        + main(): list
+    }
+
+    class ListFiles {
+        + list_files()
+    }
+
+    class DownloadFile {
+        + download_file(real_file_id: str)
+    }
+}
+
+' Uygulama Ana Başlangıcı
+package "Uygulama Yönetimi" {
+    skinparam package {
+        BackgroundColor LightGoldenRodYellow
+        BorderColor Orange
+        FontColor OrangeRed
+    }
+    class ApplicationMain {
+        + run()
+        + setup_ui_pages()
+        + show_initial_page()
+    }
+}
+
+
+' ** İlişkiler **
+
+' Ana Sayfa Yönlendirmeleri (Bağımlılık) - Login sonrası rol ayrımı
+LoginPage "1" --> "1" TercihlerKullaniciPage : **Kullanıcı Rolü Yönlendirmesi**
+LoginPage "1" --> "1" TercihlerAdminPage : **Yönetici\nYönlendirmesi**
+
+' Tercihler Sayfalarından Asıl İçerik Sayfalarına Geçişler (Bağımlılık/Kullanım)
+TercihlerKullaniciPage "1" --> "1" BasvurularPage : erişim sağlar
+TercihlerKullaniciPage "1" --> "1" MulakatlarPage : erişim sağlar
+TercihlerKullaniciPage "1" --> "1" MentorPage : erişim sağlar
+' TercihlerKullaniciPage'den tekrar LoginPage'e dönme veya uygulamayı kapatma
+TercihlerKullaniciPage --> LoginPage : ana menüye döner
+TercihlerKullaniciPage --> ApplicationMain : uygulamayı kapatır
+
+TercihlerAdminPage "1" --> "1" BasvurularPage : erişim sağlar
+TercihlerAdminPage "1" --> "1" MulakatlarPage : erişim sağlar
+TercihlerAdminPage "1" --> "1" MentorPage : erişim sağlar
+TercihlerAdminPage "1" --> "1" AdminPage : erişim sağlar (Yönetici Menüsü)
+' TercihlerAdminPage'den tekrar LoginPage'e dönme veya uygulamayı kapatma
+TercihlerAdminPage --> LoginPage : ana menüye döner
+TercihlerAdminPage --> ApplicationMain : uygulamayı kapatır
+
+' GUI Sınıflarından Yardımcı Modüllere Bağımlılık
+BasvurularPage ..> FindExcel : kullanır
+MulakatlarPage ..> FindExcel : kullanır
+MentorPage ..> FindExcel : kullanır
+AdminPage ..> GetEvents : kullanır
+
+' Google API Yardımcı Modüller Arası İlişkiler (Bağımlılık)
+GetEvents ..> Auth : kullanır
+ListFiles ..> Auth : kullanır
+DownloadFile ..> Auth : kullanır
+
+' Main Uygulama Akışının Sayfa Oluşturma ve Yönetme İlişkileri
+ApplicationMain "1" --> "1" LoginPage : oluşturur ve yönetir
+ApplicationMain "1" --> "1" BasvurularPage : oluşturur ve yönetir
+ApplicationMain "1" --> "1" MulakatlarPage : oluşturur ve yönetir
+ApplicationMain "1" --> "1" MentorPage : oluşturur ve yönetir
+ApplicationMain "1" --> "1" AdminPage : oluşturur ve yönetir
+ApplicationMain "1" --> "1" TercihlerKullaniciPage : oluşturur ve yönetir
+ApplicationMain "1" --> "1" TercihlerAdminPage : oluşturur ve yönetir
+
+@enduml
+İlişkiler **
+
+' Ana Sayfa Yönlendirmeleri (Bağımlılık) - Login sonrası rol ayrımı
+LoginPage "1" --> "1" TercihlerKullaniciPage : **Kullanıcı Rolü Yönlendirmesi**
+LoginPage "1" --> "1" TercihlerAdminPage : **Yönetici Yönlendirmesi**
+
+' Tercihler Sayfalarından Asıl İçerik Sayfalarına Geçişler (Bağımlılık/Kullanım)
+TercihlerKullaniciPage "1" --> "1" BasvurularPage : erişim sağlar
+TercihlerKullaniciPage "1" --> "1" MulakatlarPage : erişim sağlar
+TercihlerKullaniciPage "1" --> "1" MentorPage : erişim sağlar
+' TercihlerKullaniciPage'den tekrar LoginPage'e dönme veya uygulamayı kapatma
+TercihlerKullaniciPage --> LoginPage : ana menüye döner
+TercihlerKullaniciPage --> ApplicationMain : uygulamayı kapatır
+
+TercihlerAdminPage "1" --> "1" BasvurularPage : erişim sağlar
+TercihlerAdminPage "1" --> "1" MulakatlarPage : erişim sağlar
+TercihlerAdminPage "1" --> "1" MentorPage : erişim sağlar
+TercihlerAdminPage "1" --> "1" AdminPage : erişim sağlar (Yönetici Menüsü)
+' TercihlerAdminPage'den tekrar LoginPage'e dönme veya uygulamayı kapatma
+TercihlerAdminPage --> LoginPage : ana menüye döner
+TercihlerAdminPage --> ApplicationMain : uygulamayı kapatır
+
+' GUI Sınıflarından Yardımcı Modüllere Bağımlılık
+BasvurularPage ..> FindExcel : kullanır
+MulakatlarPage ..> FindExcel : kullanır
+MentorPage ..> FindExcel : kullanır
+AdminPage ..> GetEvents : kullanır
+
+' Google API Yardımcı Modüller Arası İlişkiler (Bağımlılık)
+GetEvents ..> Auth : kullanır
+ListFiles ..> Auth : kullanır
+DownloadFile ..> Auth : kullanır
+
+' Main Uygulama Akışının Sayfa Oluşturma ve Yönetme İlişkileri
+ApplicationMain "1" --> "1" LoginPage : oluşturur ve yönetir
+ApplicationMain "1" --> "1" BasvurularPage : oluşturur ve yönetir
+ApplicationMain "1" --> "1" MulakatlarPage : oluşturur ve yönetir
+ApplicationMain "1" --> "1" MentorPage : oluşturur ve yönetir
+ApplicationMain "1" --> "1" AdminPage : oluşturur ve yönetir
+ApplicationMain "1" --> "1" TercihlerKullaniciPage : oluşturur ve yönetir
+ApplicationMain "1" --> "1" TercihlerAdminPage : oluşturur ve yönetir
+
+@enduml

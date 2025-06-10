@@ -1,0 +1,17 @@
+@startuml
+' main.py için soyut bir temsil
+class ApplicationMain {
+    + run()
+    + setup_ui_pages()
+    + show_initial_page()
+}
+
+' ApplicationMain sınıfı, diğer sayfa sınıflarını başlatır ve yönetir
+ApplicationMain "1" --> "1" LoginPage : creates and manages
+ApplicationMain "1" --> "1" BasvurularPage : creates and manages
+ApplicationMain "1" --> "1" MulakatlarPage : creates and manages
+ApplicationMain "1" --> "1" MentorPage : creates and manages
+ApplicationMain "1" --> "1" AdminPage : creates and manages
+ApplicationMain "1" --> "1" TercihlerKullaniciPage : creates and manages
+ApplicationMain "1" --> "1" TercihlerAdminPage : creates and manages
+@enduml

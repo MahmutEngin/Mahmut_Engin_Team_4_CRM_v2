@@ -1,0 +1,67 @@
+@startuml
+!theme plain
+
+' Tool Categories or Modules
+rectangle "Development Environment" as DevEnv {
+  class "VS Code" as VSCode
+}
+
+rectangle "Version Control & Hosting" as VCS {
+  class "Git" as Git
+  class "GitHub / GitLab" as GitHub
+}
+
+rectangle "Project Management" as ProjMgmt {
+  class "Trello / Jira" as ProjTools
+}
+
+rectangle "Communication & Collaboration" as Comms {
+  class "Slack / Microsoft Teams" as Chat
+}
+
+rectangle "Dependency Management" as DepMgmt {
+  class "venv / Conda" as VEnv
+}
+
+' Relationships (indicating purpose)
+VSCode -- Git : "Integrated VCS"
+Git -- GitHub : "Repository Hosting"
+
+VSCode -- VEnv : "Virtual Environment Integration"
+
+GitHub -- ProjTools : "Task/Issue Tracking"
+GitHub -- Chat : "Notifications"
+
+ProjTools -- Chat : "Project Updates"
+
+' Notes for Usage
+note bottom of VSCode
+  Code Writing
+  Debugging
+  Extension Support
+end note
+
+note bottom of GitHub
+  Code Sharing
+  Code Review (PR/MR)
+  Version History
+end note
+
+note bottom of ProjTools
+  Task Assignment
+  Progress Tracking
+  Sprint Management
+end note
+
+note bottom of Chat
+  Instant Messaging
+  Meetings
+  File Sharing
+end note
+
+note bottom of VEnv
+  Dependency Isolation
+  Project Consistency
+end note
+
+@enduml

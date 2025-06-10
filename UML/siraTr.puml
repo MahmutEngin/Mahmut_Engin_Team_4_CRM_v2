@@ -1,0 +1,97 @@
+@startuml
+' Bu sıra diyagramı, kullanıcı girişini ve veri görüntüleme akışını adım adım göstermektedir.
+
+skinparam BackgroundColor white
+skinparam ParticipantBorderColor #555555
+skinparam ParticipantBackgroundColor LightYellow
+skinparam ActorFontColor DarkBlue
+skinparam ArrowColor #333333
+skinparam Linetype ortho
+skinparam DefaultFontName "Inter"
+skinparam Shadowing false
+
+actor "Kullanıcı" as User
+
+participant "LoginPage" as LP
+participant "Auth Sistemi" as Auth
+participant "TercihlerKullaniciPage" as TKP
+participant "TercihlerAdminPage" as TAP
+participant "BasvurularPage" as BP
+participant "MulakatlarPage" as MP
+participant "MentorPage" as MNP
+participant "AdminPage" as AP
+participant "FindExcel" as FE
+
+autonumber
+
+User -> LP : Uygulamayı Başlat / Giriş Ekranını Aç
+activate LP
+LP -> User : Giriş Ekranını Göster (Kullanıcı Adı, Şifre Alanları)
+User -> LP : Kullanıcı Adı ve Şifre Gir
+User -> LP : "Giriş Yap" Butonuna Tıkla
+
+LP -> Auth : girisYap(kullaniciAdi, sifre)
+activate Auth
+Auth --> LP : Giriş Sonucu (başarılı/başarısız)
+deactivate Auth
+
+alt Giriş Başarısız ise
+    LP -> User : "Hatalı Giriş" Uyarısı Göster
+    LP -> LP : Giriş Alanlarını Temizle
+else Giriş Başarılı ise
+    alt Kullanıcı Rolü ise
+        LP -> TKP : diger_sayfalar(basvuruform, mulakatlarform, mentorform, ...)
+        activate TKP
+        LP -> TKP : TercihlerKullaniciPage'i Yükle
+        deactivate LP
+        TKP -> User : Kullanıcı Tercihleri Ekranını Göster
+        User -> TKP : "Başvuruları Görüntüle" Seçeneğini Seç
+        TKP -> BP : tumbasvulari_getir()
+        activate BP
+        BP -> FE : get_excel_files_from_latest_vit()
+        activate FE
+        FE --> BP : Excel Dosya Yolları
+        deactivate FE
+        BP -> User : Başvuru Verilerini Göster
+        deactivate BP
+        TKP -> User : Diğer Sayfa Seçeneklerini Sun
+        User -> TKP : "Çıkış Yap" veya "Ana Menüye Dön" Seçeneği
+        alt Çıkış Yap
+            TKP --> User : Uygulamayı Kapat
+            deactivate TKP
+            destroy TKP
+        else Ana Menüye Dön
+            TKP --> LP : anamenu_fonk()
+            deactivate TKP
+            destroy TKP
+            activate LP
+            LP -> User : Giriş Ekranını Göster
+        end
+    else Yönetici Rolü ise
+        LP -> TAP : diger_sayfalar(basvuruform, mentorform, mulakatlarform, adminform, ...)
+        activate TAP
+        LP -> TAP : TercihlerAdminPage'i Yükle
+        deactivate LP
+        TAP -> User : Yönetici Tercihleri Ekranını Göster
+        User -> TAP : "Yönetici Menüsü" Seçeneğini Seç
+        TAP -> AP : etkinliklerin_kontrolu()
+        activate AP
+        AP -> User : Yönetici İşlevlerini Göster (Olaylar vb.)
+        deactivate AP
+        TAP -> User : Diğer Sayfa Seçeneklerini Sun
+        User -> TAP : "Çıkış Yap" veya "Ana Menüye Dön" Seçeneği
+        alt Çıkış Yap
+            TAP --> User : Uygulamayı Kapat
+            deactivate TAP
+            destroy TAP
+        else Ana Menüye Dön
+            TAP --> LP : anamenu_fonk()
+            deactivate TAP
+            destroy TAP
+            activate LP
+            LP -> User : Giriş Ekranını Göster
+        end
+    end
+end
+
+@enduml

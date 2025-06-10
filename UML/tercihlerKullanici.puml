@@ -1,0 +1,20 @@
+@startuml
+class TercihlerKullaniciPage {
+    - basvuruform: BasvurularPage
+    - mulakatlarform: MulakatlarPage
+    - mentorform: MentorPage
+    - tercihlerKullanici: TercihlerKullaniciPage
+    - pushButton_basvuru: QtWidgets.QPushButton
+    - pushButton_mentorGorusmesi: QtWidgets.QPushButton
+    - pushButton_mulakatlar: QtWidgets.QPushButton
+    - pushButton_anamenu: QtWidgets.QPushButton
+    - pushButton_kapatma: QtWidgets.QPushButton
+    + __init__()
+    + diger_sayfalar(basvuruform, mulakatlarform, mentorform, tercihlerKullanici)
+    + basvuru_fonk()
+    + mentorGorusmesi_fonk()
+    + mulakatlar_fonk()
+    + anamenu_fonk()
+    + kapatma_fonk()
+}
+@enduml

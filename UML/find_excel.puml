@@ -1,0 +1,6 @@
+@startuml
+class FindExcel {
+    + get_latest_vit_folder(base_path: str): str
+    + get_excel_files_from_latest_vit(base_path: str): dict
+}
+@enduml

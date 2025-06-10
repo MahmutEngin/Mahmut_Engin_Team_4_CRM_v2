@@ -1,0 +1,67 @@
+@startuml
+!theme plain
+
+' Araç Kategorileri veya Modüller
+rectangle "Geliştirme Ortamı" as DevEnv {
+  class "VS Code" as VSCode
+}
+
+rectangle "Versiyon Kontrol ve Depolama" as VCS {
+  class "Git" as Git
+  class "GitHub / GitLab" as GitHub
+}
+
+rectangle "Proje Yönetimi" as ProjMgmt {
+  class "Trello / Jira" as ProjTools
+}
+
+rectangle "İletişim ve İşbirliği" as Comms {
+  class "Slack / Microsoft Teams" as Chat
+}
+
+rectangle "Bağımlılık Yönetimi" as DepMgmt {
+  class "venv / Conda" as VEnv
+}
+
+' İlişkiler (Ne için kullanıldığına dair)
+VSCode -- Git : "Entegre VCS"
+Git -- GitHub : "Depo Barındırma"
+
+VSCode -- VEnv : "Sanal Ortam Entegrasyonu"
+
+GitHub -- ProjTools : "Gorev/Issue Takibi"
+GitHub -- Chat : "Bildirimler"
+
+ProjTools -- Chat : "Proje Güncellemeleri"
+
+' Kullanım Amaçları için notlar
+note bottom of VSCode
+  Kod Yazma
+  Hata Ayıklama
+  Eklenti Desteği
+end note
+
+note bottom of GitHub
+  Kod Paylaşımı
+  Kod İnceleme (PR/MR)
+  Versiyon Geçmişi
+end note
+
+note bottom of ProjTools
+  Görev Atama
+  İlerleme Takibi
+  Sprint Yönetimi
+end note
+
+note bottom of Chat
+  Anlık Mesajlaşma
+  Toplantılar
+  Dosya Paylaşımı
+end note
+
+note bottom of VEnv
+  Bağımlılık İzolasyonu
+  Proje Tutarlılığı
+end note
+
+@enduml

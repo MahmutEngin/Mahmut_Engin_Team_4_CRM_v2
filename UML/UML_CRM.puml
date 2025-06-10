@@ -1,0 +1,227 @@
+@startuml
+' !theme plain satırı kaldırıldı veya yorum satırı yapıldı.
+' Bu sayede PlantUML'ın varsayılan erişim belirteçleri (+ ve -) gösterilecektir.
+'!theme plain
+' skinparam classAttributeIconSize 0
+
+' Arayüz Sınıfları (QMainWindow'dan türeyenler)
+class LoginPage {
+    - basvuruform: BasvurularPage
+    - mulakatlarform: MulakatlarPage
+    - mentorform: MentorPage
+    - adminform: AdminPage
+    - tercihlerAdmin: TercihlerAdminPage
+    - tercihlerKullanici: TercihlerKullaniciPage
+    - basvuruform_lg: BasvurularPage
+    - mulakatlarform_lg: MulakatlarPage
+    - mentorform_lg: MentorPage
+    - adminform_lg: AdminPage
+    - tercihlerAdmin_lg: TercihlerAdminPage
+    - tercihlerKullanici_lg: TercihlerKullaniciPage
+    - pushButton_login: QtWidgets.QPushButton
+    - pushButton_exit: QtWidgets.QPushButton
+    - lineEdit_username: QtWidgets.QLineEdit
+    - lineEdit_password: QtWidgets.QLineEdit
+    - label_bilgilendirme: QtWidgets.QLabel
+    + __init__()
+    + diger_sayfalar(BasvurularPage, MulakatlarPage, MentorPage, AdminPage, TercihlerKullaniciPage, TercihlerAdminPage)
+    + girisyap()
+    + gecis_yap(hedef_sayfa)
+    + uygulama_kapatma()
+}
+
+class BasvurularPage {
+    - sayfa: QMainWindow
+    - kullanici: str
+    - excel_path: str
+    - dosya_basvurular: openpyxl.Workbook
+    - sayfa_basvurular: openpyxl.worksheet.Worksheet
+    - satir_sayisi: int
+    - sutun_sayisi: int
+    - pushButton_tumBasvurular: QtWidgets.QPushButton
+    - pushButton_tanimlananMentorGorusmesi: QtWidgets.QPushButton
+    - pushButton_tanimlanmayanMentorGorusmesi: QtWidgets.QPushButton
+    - pushButton_oncekiVitKontrol: QtWidgets.QPushButton
+    - pushButton_basvuruFiltrele: QtWidgets.QPushButton
+    - pushButton_mukerrerKayit: QtWidgets.QPushButton
+    - pushButton_farkliKayit: QtWidgets.QPushButton
+    - pushButton_tercihler: QtWidgets.QPushButton
+    - pushButton_exit: QtWidgets.QPushButton
+    - pushButton_ara: QtWidgets.QPushButton
+    - lineEdit_ara: QtWidgets.QLineEdit
+    - tableWidget_goster: QtWidgets.QTableWidget
+    + __init__()
+    + diger_sayfa(page)
+    + tercihler_sayfasina_don()
+    + tumbasvulari_getir()
+    + mentor_gosrusmesi_tanimlananlar()
+    + mentor_gosrusmesi_tanimlanmayanlar()
+    + onceki_vit_kontrol()
+    + mukerrer_kayitlar()
+    + farkli_kayitlar()
+    + basvurulari_filtrele()
+    + cikis_yap()
+    + arama_yapilamasi()
+}
+
+class MulakatlarPage {
+    - excel_path: str
+    - initializing: bool
+    - sayfa: QMainWindow
+    - pushButton_ara: QtWidgets.QPushButton
+    - pushButton_projeGonderilenler: QtWidgets.QPushButton
+    - pushButton_projeGelmeyenler: QtWidgets.QPushButton
+    - pushButton_tumMulakatlar: QtWidgets.QPushButton
+    - pushButton_tercihler: QtWidgets.QPushButton
+    - pushButton_exit: QtWidgets.QPushButton
+    - lineEdit_ara: QtWidgets.QLineEdit
+    - comboBox_cokluSekme: QtWidgets.QComboBox
+    - tableWidget: QtWidgets.QTableWidget
+    + __init__()
+    + load_excel()
+    + display_data(headers, data)
+    + search()
+    + projesi_gonderilmis_olanlar()
+    + projesi_gelmis_olanlar()
+    + interviews()
+    + multiple_tabs_changed(index)
+    + fill_combobox_categories()
+    + diger_sayfa(page)
+    + tercihlerSayfasinaDon()
+    + cikis_yap()
+}
+
+class MentorPage {
+    - excel_path: str
+    - initializing: bool
+    - sayfa: QMainWindow
+    - pushButton_ara: QtWidgets.QPushButton
+    - pushButton_tumGorusmeler: QtWidgets.QPushButton
+    - pushButton_tercihler: QtWidgets.QPushButton
+    - pushButton_exit: QtWidgets.QPushButton
+    - comboBox_cokluSekme: QtWidgets.QComboBox
+    - lineEdit_ara: QtWidgets.QLineEdit
+    - tableWidget: QtWidgets.QTableWidget
+    + __init__()
+    + load_excel()
+    + display_data(headers, data)
+    + search()
+    + interviews()
+    + multiple_tabs_changed(index)
+    + fill_combobox_categories()
+    + go_back()
+    + exitp()
+    + diger_sayfa(page)
+}
+
+class AdminPage {
+    - sayfa: QMainWindow
+    - olaylar: list
+    - pushButton_etkinlikkontrolu: QtWidgets.QPushButton
+    - pushButton_mailgonder: QtWidgets.QPushButton
+    - pushButton_tercihler: QtWidgets.QPushButton
+    - pushButton_exit: QtWidgets.QPushButton
+    - tableWidget_show: QtWidgets.QTableWidget
+    + __init__()
+    + etkinliklerin_kontrolu()
+    + mailadreslerine_gonder()
+    + diger_sayfa(page)
+    + uygulama_kapatma()
+    + sayfayaGeriDon()
+}
+
+class TercihlerKullaniciPage {
+    - basvuruform: BasvurularPage
+    - mulakatlarform: MulakatlarPage
+    - mentorform: MentorPage
+    - tercihlerKullanici: TercihlerKullaniciPage
+    - pushButton_basvuru: QtWidgets.QPushButton
+    - pushButton_mentorGorusmesi: QtWidgets.QPushButton
+    - pushButton_mulakatlar: QtWidgets.QPushButton
+    - pushButton_anamenu: QtWidgets.QPushButton
+    - pushButton_kapatma: QtWidgets.QPushButton
+    + __init__()
+    + diger_sayfalar(basvuruform, mulakatlarform, mentorform, tercihlerKullanici)
+    + basvuru_fonk()
+    + mentorGorusmesi_fonk()
+    + mulakatlar_fonk()
+    + anamenu_fonk()
+    + kapatma_fonk()
+}
+
+class TercihlerAdminPage {
+    - basvuruform: BasvurularPage
+    - mentorform: MentorPage
+    - mulakatlarform: MulakatlarPage
+    - adminform: AdminPage
+    - tercihlerAdmin: TercihlerAdminPage
+    - pushButton_basvurular: QtWidgets.QPushButton
+    - pushButton_mentorGorusmeleri: QtWidgets.QPushButton
+    - pushButton_mulakatlar: QtWidgets.QPushButton
+    - pushButton_adminMenu: QtWidgets.QPushButton
+    - pushButton_anamenu: QtWidgets.QPushButton
+    - pushButton_kapatma: QtWidgets.QPushButton
+    + __init__()
+    + diger_sayfalar(basvuruform, mentorform, mulakatlarform, adminform, tercihlerAdmin)
+    + basvurular_fonk()
+    + mentorGorusmesi_fonk()
+    + mulakatlar_fonk()
+    + adminMenu_fonk()
+    + anamenu_fonk()
+    + kapatma_fonk()
+}
+
+' Yardımcı Modüller (Fonksiyonel sınıflar veya tekil fonksiyonlar)
+class Auth {
+    - SCOPES: list
+    + auth(): Credentials
+}
+
+class FindExcel {
+    + get_latest_vit_folder(base_path: str): str
+    + get_excel_files_from_latest_vit(base_path: str): dict
+}
+
+class GetEvents {
+    - SCOPES: list
+    + main(): list
+}
+
+class ListFiles {
+    + list_files()
+}
+
+class DownloadFile {
+    + download_file(real_file_id: str)
+}
+
+
+' İlişkiler
+
+LoginPage "1" --> "1" BasvurularPage : uses
+LoginPage "1" --> "1" MulakatlarPage : uses
+LoginPage "1" --> "1" MentorPage : uses
+LoginPage "1" --> "1" AdminPage : uses
+LoginPage "1" --> "1" TercihlerKullaniciPage : uses
+LoginPage "1" --> "1" TercihlerAdminPage : uses
+
+TercihlerKullaniciPage "1" --> "1" BasvurularPage : calls
+TercihlerKullaniciPage "1" --> "1" MulakatlarPage : calls
+TercihlerKullaniciPage "1" --> "1" MentorPage : calls
+
+TercihlerAdminPage "1" --> "1" BasvurularPage : calls
+TercihlerAdminPage "1" --> "1" MulakatlarPage : calls
+TercihlerAdminPage "1" --> "1" MentorPage : calls
+TercihlerAdminPage "1" --> "1" AdminPage : calls
+
+BasvurularPage ..> FindExcel : uses
+MulakatlarPage ..> FindExcel : uses
+MentorPage ..> FindExcel : uses
+
+AdminPage ..> GetEvents : uses
+
+GetEvents ..> Auth : uses
+ListFiles ..> Auth : uses
+DownloadFile ..> Auth : uses
+
+@enduml

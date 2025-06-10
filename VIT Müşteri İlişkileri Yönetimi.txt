@@ -1,0 +1,71 @@
+# VIT CRM Projesi: Excel Veri Yönetim Sistemi Proje Makalesi
+
+## 1. Giriş
+Günümüzde birçok kuruluş, verilerini yönetme ve saklama çözümleri için Google Drive ve bileşenlerini kısmen ücretsiz sunduğu için tercih etmektedir. Özellikle IT alanında çalışmak isteyen mülteci kökenli kişiler için çeşitli organizasyonlar, mentor görüşmeleri, projelendirme ve mülakat aşamaları dahil olmak üzere bir dizi süreci Google Drive üzerinde yürütmektedir. Ancak, adayların takibinde sürekli açık oturum ihtiyacı, Excel metinlerinin karışıklığı ve istenilen verilere kısa yoldan ulaşmadaki zorluklar gibi faktörler, bu süreçleri karmaşık hale getirmektedir. Bu zorlukları aşmak ve işleri daha kolay hale getirmek amacıyla, kullanıcı dostu bir CRM (Customer Relationship Management - Müşteri İlişkileri Yönetimi) uygulaması tasarlanmıştır. Bu proje, VIT (Vizyoner İnovasyon ve Teknoloji) programı kapsamında, Excel tabanlı verilerin etkin bir şekilde yönetilmesi ve izlenmesi için geliştirilmiş bir masaüstü uygulamasıdır.
+
+## 2. Mimari ve Teknolojiler
+Proje, Nesne Yönelimli Programlama (OOP) prensipleriyle, modüler ve genişletilebilir bir yapıya sahip olacak şekilde tasarlanmıştır. Her bir ana işlevsellik, PyQt6 framework'ü kullanılarak ayrı bir pencere (sınıf) olarak inşa edilmiştir.
+
+### 2.1. Kullanılan Temel Teknolojiler ve Araçlar
+* **Python 3.x**: Uygulamanın temel programlama dilidir. Temiz sözdizimi ve zengin kütüphane ekosistemi sayesinde hızlı geliştirme ve güçlü veri işleme yetenekleri sunar.
+* **PyQt6 & Qt Designer**: Kullanıcı arayüzü (UI) geliştirmek için tercih edilen, platformlar arası uyumlu ve zengin özelliklere sahip bir GUI kütüphanesidir. Qt Designer, sürükle-bırak arayüz tasarımı ile `.ui` dosyalarını oluşturmayı ve bu dosyaların Python koduna kolayca entegre edilmesini sağlar.
+* **openpyxl**: `.xlsx` formatındaki Excel dosyalarını okuma, yazma ve değiştirme işlemleri için kullanılan Python kütüphanesidir. Projenin ana veri kaynağı olan Excel dosyalarıyla kesintisiz etkileşimi sağlar.
+* **os**: İşletim sistemiyle etkileşim kurmak, dosya yollarını yönetmek ve dosyaların/dizinlerin varlığını kontrol etmek için kullanılır. UI dosyaları ve dinamik veri klasörleri arasındaki gezinmeyi sağlar.
+* **re (Regular Expression)**: Düzenli ifadeler aracılığıyla metin eşleştirme ve arama işlemleri için kullanılır. Özellikle `find_excel` modülünde VIT klasörlerinin isimlendirme desenlerini tanımada kritik rol oynar.
+* **datetime**: Tarih ve saat manipülasyonları için Python'ın yerleşik modülüdür. Google Takvim entegrasyonunda etkinlik zamanlarını işlemek ve tarih tabanlı filtrelemelerde kullanılır.
+* **json**: Hafif veri değişim formatı olarak, uygulama içi konfigürasyonları veya geçici verileri saklamak için kullanılabilir.
+* **find_excel (Özel Modül)**: Projeye özel olarak geliştirilen bu modül, uygulamanın çalıştırıldığı dizindeki `data` klasörü içerisindeki en güncel "VIT" numaralı klasörü (örn: `VIT_2025_06_07`) ve bu klasördeki ilgili Excel dosyalarını (Basvurular, Mentor, Mulakatlar, Kullanicilar) dinamik olarak bulur. Bu özellik, veri kaynaklarının esnekliğini ve sürdürülebilirliğini önemli ölçüde artırır.
+* **Google API Kütüphaneleri (`google-api-python-client`, `google-auth-oauthlib`, `google-auth`)**: Bu kütüphaneler, uygulamanın Google ekosistemiyle (Drive ve Takvim) entegrasyonunu sağlar. Özellikle Admin Menü'sünde Google Takvim etkinliklerini çekme ve e-posta gönderme işlevleri için kullanılır.
+
+### 2.2. Modüler Yapı ve Kullanıcı Akışı
+Proje, her biri belirli bir işlevselliği temsil eden ve birbiriyle etkileşime giren aşağıdaki ana PyQt6 pencerelerinden oluşur:
+
+* **`LoginPage` (Giriş Penceresi)**: Uygulamanın **giriş noktasıdır**. Kullanıcı adı ve şifre doğrulaması yaparak, `Kullanicilar.xlsx` dosyasındaki verilere göre kullanıcıların yetkilerini (Admin/User) kontrol eder. Başarılı bir girişin ardından, kullanıcının rolüne uygun ana tercih sayfasına (`TercihlerAdminPage` veya `TercihlerKullaniciPage`) yönlendirme yapar. Özelleştirilmiş arayüz tasarımı, arka plan renkleri, kenar şekilleri ve buton özelliklerini (hover, pressed, yuvarlak kenarlar) içerir.
+* **`TercihlerAdminPage` (Yönetici Tercihleri)**: **Yönetici rolündeki kullanıcılar için ana menü sayfasıdır**. Başvurular, Mentor Görüşmeleri, Mülakatlar ve Admin Menüsü gibi dört ana modüle erişim butonları sunar.
+* **`TercihlerKullaniciPage` (Kullanıcı Tercihleri)**: **Standart kullanıcı rolündeki kullanıcılar için ana menü sayfasıdır**. Başvurular, Mentor Görüşmeleri ve Mülakatlar modüllerine erişim sağlar; yöneticiye özel Admin Menüsü butonu bu sayfada bulunmaz.
+* **`BasvurularPage`**: Başvuru verilerini yönetmek için tasarlanmış modüldür. En güncel VIT klasöründeki `Basvurular.xlsx` dosyasını okur.
+    * **Özellikler**: İsim/soyisim bazında arama, tüm başvuruları görüntüleme, mentor görüşmesi tanımlanan/tanımlanmayanları listeleme, mükerrer kayıtları tespit etme, önceki VIT dönemleriyle çapraz kontrol yapma (adayın birden fazla VIT'e başvurup başvurmadığını görme) ve benzersiz kayıtları filtreleme (aynı ismin sadece bir kez görünmesi) gibi detaylı filtreleme seçenekleri sunar. Bu filtreleme seçenekleri, esneklik için `QComboBox` ile birleştirilebilir.
+* **`MentorPage`**: Mentor görüşmesi verilerini yöneten modüldür. En güncel VIT klasöründeki `Mentor.xlsx` dosyasından verileri çeker.
+    * **Özellikler**: İsim/soyisim bazında arama, tüm görüşmeleri görüntüleme ve "Çoklu Sekme" (`QComboBox`) aracılığıyla mentorların uygunluk durumuna ("VIT projesinin tamamına katılması uygun olur" gibi) göre detaylı filtreleme imkanı sunar.
+* **`MulakatlarPage`**: Mülakat verilerini yöneten modüldür. En güncel VIT klasöründeki `Mulakatlar.xlsx` dosyasından verileri çeker.
+    * **Özellikler**: İsim/soyisim bazında arama, "Projesi Gönderilmiş Olanlar" ve "Projesi Gelmiş Olanlar" gibi projenin durumuyla ilgili kriterlere göre filtreleme yapar.
+* **`AdminPage` (Admin Menüsü)**: Yöneticiye özel fonksiyonları barındıran modüldür.
+    * **Özellikler**: Google Takvim API'si üzerinden etkinlikleri çekme, çekilen etkinlikleri bir tabloda görüntüleme ve etkinlikte kayıtlı e-posta adreslerine otomatik toplu e-posta gönderme gibi kritik yönetim işlevlerini içerir.
+
+Tüm bu sayfalar, birbirlerine referans gönderebilme yeteneğine sahiptir. Bu sayede kullanıcılar, ana menüden detay sayfalarına kolayca geçebilir ve detay sayfalarından tek bir tıklama ile ana menüye geri dönebilirler. Bu, akıcı ve kullanıcı dostu bir navigasyon deneyimi sağlar.
+
+## 3. Özellikler
+* **Kullanıcı Kimlik Doğrulama ve Rol Tabanlı Erişim Kontrolü**: `Kullanicilar.xlsx` dosyasından okunan kimlik bilgileriyle güvenli giriş ve Admin/User rollerine göre farklı menü erişimi.
+* **Özelleştirilebilir Kullanıcı Arayüzü**: PyQt6 ve Qt Designer kullanarak modern, kullanıcı dostu ve tutarlı bir görsel deneyim (özelleştirilmiş renkler, buton stilleri, fontlar).
+* **Dinamik Excel Veri Entegrasyonu**: `find_excel` modülü sayesinde, uygulamanın çalıştırıldığı dizindeki `data` klasörü içinde bulunan ve `VIT_YYYY_MM_DD` formatında isimlendirilmiş en son oluşturulan VIT klasöründeki Excel dosyaları otomatik olarak algılanır ve sisteme yüklenir. Bu, manuel dosya yolu güncellemelerine olan ihtiyacı ortadan kaldırır ve sürdürülebilirliği artırır.
+* **Kapsamlı Veri Görüntüleme**: Yüklenen tüm Excel verileri, PyQt6'nın `QTableWidget` bileşeni kullanılarak, dinamik olarak sütun başlıkları ve içeriğiyle birlikte düzenli ve okunabilir tablolarda sunulur.
+* **Gelişmiş Arama ve Filtreleme Mekanizmaları**:
+    * **Metin Tabanlı Arama**: İsim/soyisim sütunlarında anlık arama yeteneği.
+    * **Kriter Bazlı Filtreleme**: Mentor uygunluğu, proje durumu, mükerrer kayıtlar, önceki VIT'lere başvuru durumu gibi spesifik kriterlere göre veri setlerini dinamik olarak filtreleme.
+* **Akıcı Navigasyon**: Tüm uygulama modülleri arasında sezgisel ve hızlı geçişler, ana menülere kolay dönüş butonları.
+* **Google Takvim ve E-posta Entegrasyonu (Admin)**: Yöneticilerin Google Takvim'deki etkinlikleri doğrudan uygulama üzerinden görüntülemesi ve bu etkinliklere kayıtlı katılımcılara otomatik e-posta göndermesi.
+* **Modüler ve Genişletilebilir Mimari**: Nesne Yönelimli Programlama prensiplerine uygun, her işlevselliğin ayrı bir PyQt6 sınıfı olarak tasarlanması, kodun okunabilirliğini, bakımını ve gelecekte yeni özelliklerin veya modüllerin kolayca eklenmesini sağlar.
+* **Hata Yönetimi**: Dosya bulunamaması veya veri okuma hataları gibi durumlarda kullanıcıya bilgilendirici mesajlar sunulması.
+
+## 4. Proje Süreci ve Yönetimi
+Bu proje, başarılı bir yazılım geliştirme sürecinin temel adımlarını ve takım çalışması prensiplerini benimsemiştir:
+* **Görev Yönetimi**: Proje görevleri, **Trello Board** üzerinden takip edilmektedir. Bu, görev atamalarını, ilerlemeyi ve son teslim tarihlerini şeffaf bir şekilde yönetmeye yardımcı olur.
+* **Günlük Toplantılar (Daily Stand-ups)**: Takım üyeleri arasında her gün minimum 30 dakikalık günlük toplantılar (daily meeting) yapılmaktadır. Bu toplantılarda:
+    * Her takım üyesi **neleri bitirdiğini** paylaşır.
+    * Proje ile ilgili **genel değerlendirmeler** yapılır.
+    * Bir sonraki gün için **neler yapılması planlanıyor** görüşülür.
+* **Günlük Trello Güncellemesi**: Trello'da belirli tarihlere ait listeler oluşturulur. Toplantı notları, görev ayrıntıları ve günlük yapılacaklar, Trello'daki ilgili listelerde günlük olarak güncel tutulur. Bu, projenin zamanında tamamlanması için adımların takip edilmesini sağlar.
+* **UML Diyagramları**: Projenin mimarisi ve sınıf ilişkileri, **UML (Unified Modeling Language) diyagramları** kullanılarak belgelenmiştir. Bu, projenin yapısını görsel olarak anlamayı ve geliştirmeyi kolaylaştırır.
+* **Versiyon Kontrolü**: Proje kodu, **GitHub** üzerinde saklanmakta ve versiyon kontrolü sağlanmaktadır. Bu, takım çalışmasını kolaylaştırır, kod değişikliklerini izler ve olası çakışmaları yönetir.
+
+## 5. Projenin Tamamlanma Kriterleri
+Projenin "bitmiş" kabul edilmesi için aşağıdaki kriterler karşılanmalıdır:
+* Takım arkadaşları ile **koordineli bir şekilde çalışabilmek**.
+* Projenin **UML diyagramlarını** oluşturmuş ve güncel tutmuş olmak.
+* Programın **.exe halinde çalışmasını** sağlamak (Windows ortamında dağıtılabilir bir uygulama).
+* Projeyi belirlenen **gününde sunuma hazır** hale getirmiş olmak.
+* **GitHub** deposu içerisinde kapsamlı bir **README.txt dosyası** bulundurmak.
+* Opsiyonel olarak, proje hakkında bir **Medium makalesi** yayınlamış olmak.
+
+## 6. Sonuç
+Bu CRM projesi, VIT programı gibi organizasyonların Excel tabanlı veri yönetim süreçlerini modern, kullanıcı dostu ve verimli bir masaüstü uygulamasına dönüştürmektedir. Rol tabanlı erişim, dinamik veri yükleme, gelişmiş arama ve filtreleme yetenekleri ile Google entegrasyonu, veri takibindeki zorlukları önemli ölçüde azaltırken, operasyonel verimliliği artırmaktadır. Projenin modüler ve iyi belgelenmiş yapısı, gelecekteki geliştirmeler ve genişletmeler için sağlam bir temel sunmaktadır.

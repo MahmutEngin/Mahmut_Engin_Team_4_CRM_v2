@@ -1,0 +1,97 @@
+@startuml
+' This sequence diagram illustrates the user login and data display flow step by step.
+
+skinparam BackgroundColor white
+skinparam ParticipantBorderColor #555555
+skinparam ParticipantBackgroundColor LightYellow
+skinparam ActorFontColor DarkBlue
+skinparam ArrowColor #333333
+skinparam Linetype ortho
+skinparam DefaultFontName "Inter"
+skinparam Shadowing false
+
+actor "User" as User
+
+participant "LoginPage" as LP
+participant "Auth System" as Auth
+participant "UserPreferencesPage" as UPP
+participant "AdminPreferencesPage" as APP
+participant "ApplicationsPage" as AP
+participant "InterviewsPage" as IP
+participant "MentorPage" as MP
+participant "AdminPage" as ADP
+participant "FindExcel" as FE
+
+autonumber
+
+User -> LP : Launch Application / Open Login Screen
+activate LP
+LP -> User : Display Login Screen (Username, Password Fields)
+User -> LP : Enter Username and Password
+User -> LP : Click "Login" Button
+
+LP -> Auth : login(username, password)
+activate Auth
+Auth --> LP : Login Result (success/failure)
+deactivate Auth
+
+alt If Login Fails
+    LP -> User : Display "Incorrect Login" Alert
+    LP -> LP : Clear Login Fields
+else If Login Succeeds
+    alt If User Role
+        LP -> UPP : setOtherPages(applicationsForm, interviewsForm, mentorForm, ...)
+        activate UPP
+        LP -> UPP : Load UserPreferencesPage
+        deactivate LP
+        UPP -> User : Display User Preferences Screen
+        User -> UPP : Select "View Applications" Option
+        UPP -> AP : getAllApplications()
+        activate AP
+        AP -> FE : getExcelFilesFromLatestVit()
+        activate FE
+        FE --> AP : Excel File Paths
+        deactivate FE
+        AP -> User : Display Application Data
+        deactivate AP
+        UPP -> User : Present Other Page Options
+        User -> UPP : "Logout" or "Return to Main Menu" Option
+        alt Logout
+            UPP --> User : Close Application
+            deactivate UPP
+            destroy UPP
+        else Return to Main Menu
+            UPP --> LP : mainMenuFunc()
+            deactivate UPP
+            destroy UPP
+            activate LP
+            LP -> User : Display Login Screen
+        end
+    else If Admin Role
+        LP -> APP : setOtherPages(applicationsForm, mentorForm, interviewsForm, adminForm, ...)
+        activate APP
+        LP -> APP : Load AdminPreferencesPage
+        deactivate LP
+        APP -> User : Display Admin Preferences Screen
+        User -> APP : Select "Admin Menu" Option
+        APP -> ADP : checkEvents()
+        activate ADP
+        ADP -> User : Display Admin Functions (Events etc.)
+        deactivate ADP
+        APP -> User : Present Other Page Options
+        User -> APP : "Logout" or "Return to Main Menu" Option
+        alt Logout
+            APP --> User : Close Application
+            deactivate APP
+            destroy APP
+        else Return to Main Menu
+            APP --> LP : mainMenuFunc()
+            deactivate APP
+            destroy APP
+            activate LP
+            LP -> User : Display Login Screen
+        end
+    end
+end
+
+@enduml

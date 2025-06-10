@@ -1,0 +1,76 @@
+@startuml
+' This activity diagram shows the main application flow and separation based on user/admin roles.
+
+skinparam activity {
+  BorderColor black
+  BackgroundColor LightGray
+  FontColor black
+  FontSize 12
+  ArrowColor DimGray
+  ArrowFontColor DimGray
+}
+skinparam activity EndColor DarkRed
+skinparam activity StartColor DarkGreen
+skinparam ArrowThickness 1
+skinparam Shadowing false
+skinparam DefaultFontName "Inter"
+
+start
+
+:Application Started;
+:Load LoginPage;
+
+:User Login (Username/Password);
+
+if (Is Login Correct?) then (Yes)
+  if (User Role?) then (User)
+    :Load UserPreferencesPage;
+    floating note right
+      **User Pages:**
+      - Applications
+      - Interviews
+      - Mentor Meetings
+    end note
+    fork
+      :Access Applications Page;
+      :Access Interviews Page;
+      :Access Mentor Page;
+    end fork
+    :Perform User Operations;
+    :Return to Main Menu / Logout;
+    if (Logout?) then (Yes)
+      :Close Application;
+      stop
+    else (No)
+      -> LoginPage;
+    endif
+  else (Admin)
+    :Load AdminPreferencesPage;
+    floating note right
+      **Admin Pages:**
+      - Applications
+      - Interviews
+      - Mentor Meetings
+      - Admin Menu (Events/Mail)
+    end note
+    fork
+      :Access Applications Page;
+      :Access Interviews Page;
+      :Access Mentor Page;
+      :Access AdminPage;
+    end fork
+    :Perform Admin Operations;
+    :Return to Main Menu / Logout;
+    if (Logout?) then (Yes)
+      :Close Application;
+      stop
+    else (No)
+      -> LoginPage;
+    endif
+  endif
+else (No)
+  :Incorrect Login Alert;
+  -> LoginPage;
+endif
+
+@enduml

@@ -1,0 +1,24 @@
+@startuml
+class MentorPage {
+    - excel_path: str
+    - initializing: bool
+    - sayfa: QMainWindow
+    - pushButton_ara: QtWidgets.QPushButton
+    - pushButton_tumGorusmeler: QtWidgets.QPushButton
+    - pushButton_tercihler: QtWidgets.QPushButton
+    - pushButton_exit: QtWidgets.QPushButton
+    - comboBox_cokluSekme: QtWidgets.QComboBox
+    - lineEdit_ara: QtWidgets.QLineEdit
+    - tableWidget: QtWidgets.QTableWidget
+    + __init__()
+    + load_excel()
+    + display_data(headers, data)
+    + search()
+    + interviews()
+    + multiple_tabs_changed(index)
+    + fill_combobox_categories()
+    + go_back()
+    + exitp()
+    + diger_sayfa(page)
+}
+@enduml

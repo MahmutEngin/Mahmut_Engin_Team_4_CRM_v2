@@ -1,0 +1,23 @@
+@startuml
+class TercihlerAdminPage {
+    - basvuruform: BasvurularPage
+    - mentorform: MentorPage
+    - mulakatlarform: MulakatlarPage
+    - adminform: AdminPage
+    - tercihlerAdmin: TercihlerAdminPage
+    - pushButton_basvurular: QtWidgets.QPushButton
+    - pushButton_mentorGorusmeleri: QtWidgets.QPushButton
+    - pushButton_mulakatlar: QtWidgets.QPushButton
+    - pushButton_adminMenu: QtWidgets.QPushButton
+    - pushButton_anamenu: QtWidgets.QPushButton
+    - pushButton_kapatma: QtWidgets.QPushButton
+    + __init__()
+    + diger_sayfalar(basvuruform, mentorform, mulakatlarform, adminform, tercihlerAdmin)
+    + basvurular_fonk()
+    + mentorGorusmesi_fonk()
+    + mulakatlar_fonk()
+    + adminMenu_fonk()
+    + anamenu_fonk()
+    + kapatma_fonk()
+}
+@enduml

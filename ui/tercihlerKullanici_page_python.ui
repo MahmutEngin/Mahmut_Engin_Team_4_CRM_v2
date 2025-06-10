@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>396</width>
+    <height>282</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <property name="layoutDirection">
+   <enum>Qt::LeftToRight</enum>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">/* === Genel Arka Plan ve Yazı Rengi === */
+QWidget {
+    background-color: qlineargradient(
+        spread:pad, x1:0, y1:0, x2:1, y2:1,
+        stop:0 #1A2A3A,
+        stop:1 #223344
+    );
+    color: #E0F7FA;
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    font-size: 11pt;
+    border: 2px solid rgba(79, 195, 247, 0.1);
+    border-radius: 6px;
+}
+
+/* === QPushButton - Ana Butonlar === */
+QPushButton {
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:1,
+        stop:0 #03A9F4, stop:1 #0288D1);
+    color: white;
+    font-weight: bold;
+    font-size: 11pt;
+    border-radius: 6px;
+    padding: 10px 18px;
+    border: 1px solid #4FC3F7;
+    box-shadow: 0px 5px 12px rgba(3, 169, 244, 0.3);
+    transition: all 0.25s ease-in-out;
+}
+
+QPushButton:hover {
+    background-color: #D32F2F;
+    box-shadow: 0px 6px 16px rgba(211, 47, 47, 0.5);
+    transform: scale(1.02);
+}
+
+QPushButton:pressed {
+    background-color: #B71C1C;
+    box-shadow: inset 0px 3px 6px rgba(0,0,0,0.3);
+}
+
+/* === QLineEdit === */
+QLineEdit {
+    background-color: rgba(38, 53, 68, 0.9);
+    color: #E0F7FA;
+    border: 1px solid #4FC3F7;
+    border-radius: 6px;
+    padding: 8px 10px;
+    selection-background-color: #4FC3F7;
+    selection-color: #1A2A3A;
+    box-shadow: inset 1px 1px 3px rgba(0, 0, 0, 0.6);
+}
+
+/* === QComboBox === */
+QComboBox {
+    background-color: rgba(38, 53, 68, 0.9);
+    color: #E0F7FA;
+    border: 1px solid #4FC3F7;
+    border-radius: 6px;
+    padding: 8px;
+    box-shadow: inset 1px 1px 3px rgba(0, 0, 0, 0.6);
+}
+
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 25px;
+    background-color: #1B3B54;
+    border-left: 1px solid #4FC3F7;
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+}
+
+QComboBox::down-arrow {
+    width: 10px;
+    height: 10px;
+    image: none;
+}
+
+QComboBox QAbstractItemView {
+    background-color: #1B3B54;
+    color: #E0F7FA;
+    selection-background-color: #D32F2F;
+    selection-color: white;
+    border: 1px solid #4FC3F7;
+    outline: none;
+}
+
+/* === QHeaderView - Tablo Başlıkları === */
+QHeaderView::section {
+    background-color: #0288D1;
+    color: white;
+    font-weight: bold;
+    padding: 6px;
+    border: none;
+    border-bottom: 2px solid #4FC3F7;
+}
+
+/* === QTableView === */
+QTableView {
+    background-color: #223344;
+    alternate-background-color: #2A3C50;
+    gridline-color: #455A64;
+    color: #E0F7FA;
+    selection-background-color: #D32F2F;
+    selection-color: white;
+    border: 1px solid #4FC3F7;
+}
+
+QTableView::item {
+    padding: 6px;
+    border-bottom: 1px solid #4FC3F7;
+}
+
+QTableView::item:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* === Tooltip === */
+QToolTip {
+    background-color: #0288D1;
+    color: white;
+    border: 1px solid #4FC3F7;
+    padding: 4px;
+    border-radius: 4px;
+    font-size: 10pt;
+}
+
+/* === Scrollbar (opsiyonel) === */
+QScrollBar:vertical {
+    background: transparent;
+    width: 10px;
+}
+
+QScrollBar::handle:vertical {
+    background: #4FC3F7;
+    min-height: 20px;
+    border-radius: 5px;
+}
+
+QScrollBar::add-line:vertical,
+QScrollBar::sub-line:vertical {
+    height: 0px;
+}
+
+/* === QTabBar (sekme kullanıyorsan) === */
+QTabBar::tab {
+    background: #263544;
+    color: #E0F7FA;
+    padding: 8px 20px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    margin-right: 2px;
+}
+
+QTabBar::tab:selected {
+    background: #0288D1;
+    font-weight: bold;
+}
+
+/* === Cam efekti isteyen panel (isteğe bağlı kullanım) === */
+QWidget#GlassPanel {
+    background-color: rgba(30, 50, 70, 0.4);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QGridLayout" name="gridLayout_3">
+    <item row="0" column="0">
+     <layout class="QGridLayout" name="gridLayout_2">
+      <item row="0" column="0">
+       <widget class="QLabel" name="label">
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>50</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <family>Segoe UI,sans-serif</family>
+          <pointsize>11</pointsize>
+         </font>
+        </property>
+        <property name="layoutDirection">
+         <enum>Qt::LeftToRight</enum>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::Box</enum>
+        </property>
+        <property name="text">
+         <string>CRM Preference Menu</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <layout class="QGridLayout" name="gridLayout">
+        <item row="0" column="0">
+         <widget class="QPushButton" name="pushButton_basvurular">
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <family>Segoe UI,sans-serif</family>
+            <pointsize>11</pointsize>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>Applications</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QPushButton" name="pushButton_mulakatlar">
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <family>Segoe UI,sans-serif</family>
+            <pointsize>11</pointsize>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>Interviews</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QPushButton" name="pushButton_mentorGorusmesi">
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <family>Segoe UI,sans-serif</family>
+            <pointsize>11</pointsize>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>Mentor Meeting</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QPushButton" name="pushButton_anaMenu">
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <family>Segoe UI,sans-serif</family>
+            <pointsize>11</pointsize>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>Main Menu</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QPushButton" name="pushButton_exit">
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <family>Segoe UI,sans-serif</family>
+            <pointsize>11</pointsize>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>Exit</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>396</width>
+     <height>35</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

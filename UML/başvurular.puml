@@ -1,0 +1,35 @@
+@startuml
+class BasvurularPage {
+    - sayfa: QMainWindow
+    - kullanici: str
+    - excel_path: str
+    - dosya_basvurular: openpyxl.Workbook
+    - sayfa_basvurular: openpyxl.worksheet.Worksheet
+    - satir_sayisi: int
+    - sutun_sayisi: int
+    - pushButton_tumBasvurular: QtWidgets.QPushButton
+    - pushButton_tanimlananMentorGorusmesi: QtWidgets.QPushButton
+    - pushButton_tanimlanmayanMentorGorusmesi: QtWidgets.QPushButton
+    - pushButton_oncekiVitKontrol: QtWidgets.QPushButton
+    - pushButton_basvuruFiltrele: QtWidgets.QPushButton
+    - pushButton_mukerrerKayit: QtWidgets.QPushButton
+    - pushButton_farkliKayit: QtWidgets.QPushButton
+    - pushButton_tercihler: QtWidgets.QPushButton
+    - pushButton_exit: QtWidgets.QPushButton
+    - pushButton_ara: QtWidgets.QPushButton
+    - lineEdit_ara: QtWidgets.QLineEdit
+    - tableWidget_goster: QtWidgets.QTableWidget
+    + __init__()
+    + diger_sayfa(page)
+    + tercihler_sayfasina_don()
+    + tumbasvulari_getir()
+    + mentor_gosrusmesi_tanimlananlar()
+    + mentor_gosrusmesi_tanimlanmayanlar()
+    + onceki_vit_kontrol()
+    + mukerrer_kayitlar()
+    + farkli_kayitlar()
+    + basvurulari_filtrele()
+    + cikis_yap()
+    + arama_yapilamasi()
+}
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+class GetEvents {
+    - SCOPES: list
+    + main(): list
+}
+@enduml
